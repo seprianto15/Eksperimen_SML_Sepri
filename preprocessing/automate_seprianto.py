@@ -10,7 +10,7 @@ def load_data(file_path='../data/after_preprocessing.csv'):
     """Function to load data from a CSV file"""
     
     try:
-        data_student = pd.read_csv(file_path, sep=";")
+        data_student = pd.read_csv(file_path, sep=",")
         
         if 'Student_ID' not in data_student.columns:
             data_student.insert(0, 'Student_ID', range(1001, 1001 + len(data_student)))
