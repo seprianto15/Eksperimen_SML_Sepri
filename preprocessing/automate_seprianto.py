@@ -5,7 +5,7 @@ from sklearn.preprocessing import StandardScaler, LabelEncoder, OneHotEncoder
 # ================================================================================================
 """START OF DATA LOADING FUNCTION"""
 # ================================================================================================
-def load_data(file_path='../data/data_student.csv'):
+def load_data(file_path='../data/after_preprocessing.csv'):
     """Function to load data from a CSV file"""
     
     try:
