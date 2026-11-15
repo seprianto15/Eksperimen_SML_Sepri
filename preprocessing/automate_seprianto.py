@@ -6,14 +6,14 @@ from sklearn.preprocessing import StandardScaler, LabelEncoder, OneHotEncoder
 # ================================================================================================
 """START OF DATA LOADING FUNCTION"""
 # ================================================================================================
-def load_data(file_path='../data/data_student.csv'):
+def load_data(file_path='../data/after_preprocessing.csv'):
     """Function to load data from a CSV file"""
     
     try:
         data_student = pd.read_csv(file_path, sep=";")
         
         if 'Student_ID' not in data_student.columns:
-            data_student.insert(0, 'Student_ID', range(1000001, 1000001 + len(data_student)))
+            data_student.insert(0, 'Student_ID', range(1001, 1001 + len(data_student)))
             
             print(data_student.head(5))
             
