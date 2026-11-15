@@ -7,16 +7,15 @@ from sklearn.preprocessing import StandardScaler, LabelEncoder, OneHotEncoder
 # ================================================================================================
 def load_data(file_path='../data/after_preprocessing.csv'):
     """Function to load data from a CSV file"""
-    
     try:
         data_student = pd.read_csv(file_path, sep=";")
         
         if 'Student_ID' not in data_student.columns:
             data_student.insert(0, 'Student_ID', range(1000001, 1000001 + len(data_student)))
             
-            print(data_student.head(5))
-            
-            return data_student
+        print(data_student.head(5))
+        
+        return data_student
     
     except FileNotFoundError:
         print(f"File not found: {file_path}")
@@ -36,7 +35,6 @@ def load_data(file_path='../data/after_preprocessing.csv'):
 # Split columns into numerical and categorical features
 def get_categorical_features(data):
     """Function to split columns into categorical features"""
-    
     try:
         categorical_features = [
                 'Marital_status',
@@ -87,6 +85,9 @@ def clean_outlier(data, numerical_features):
         print("\n[1] OUTLIER HANDLING")
         print("-" * 100)
 
+        # Pastikan kolom numerik bertipe float untuk menghindari error operasi matematika
+        data[numerical_features] = data[numerical_features].astype(float)
+
         # Calculate Q1, Q3, and IQR
         Q1 = data[numerical_features].quantile(0.25)
         Q3 = data[numerical_features].quantile(0.75)
@@ -104,6 +105,7 @@ def clean_outlier(data, numerical_features):
     
     except Exception as e:
         print(f"An error occurred while handling outliers: {e}")
+        return data  # Tetap kembalikan data agar pipeline tidak terputus
 
 
 def standardize_numerical_features(data, numerical_features):
@@ -120,6 +122,7 @@ def standardize_numerical_features(data, numerical_features):
         
     except Exception as e:
         print(f"An error occurred while standardizing numerical features: {e}")
+        return data
 
 
 def encode_status(data):
@@ -139,6 +142,7 @@ def encode_status(data):
     
     except Exception as e:
         print(f"An error occurred while encoding 'Status': {e}")
+        return data
 
 
 def binning_categorical_features(data, categorical_features):
@@ -253,6 +257,7 @@ def binning_categorical_features(data, categorical_features):
 
     except Exception as e:
         print(f"An error occurred while binning numerical features: {e}")
+        return data
 
 
 def one_hot_categorical(data, categorical_features):
@@ -284,7 +289,8 @@ def one_hot_categorical(data, categorical_features):
         return data
 
     except Exception as e:
-        [print(f"An error occurred while one hot encoder categorical features: {e}")]
+        print(f"An error occurred while one hot encoder categorical features: {e}")
+        return data
 # ================================================================================================
 """END OF PREPROCESSING DATA"""
 # ================================================================================================
@@ -297,13 +303,15 @@ def main():
     print("=" * 100)
     
     all_data = load_data()
+    if all_data is None:
+        print("[ERROR] Data failed to load. Stopping pipeline.")
+        return
     
     print("\n" + "=" * 100)
     print("     DATA LOADING COMPLETED      ")
     print("\n" + "=" * 100)
 
     # 2. Split all_data into numerical_features and categorical_features
-   
     num_features = get_numerical_features(all_data)
     cat_features = get_categorical_features(all_data)
 
@@ -323,7 +331,7 @@ def main():
     # 6. Bining categorical features
     bin_cat = binning_categorical_features(col_status, categorical_features=cat_features)
 
-     # 7. Apply One-Hot Encoding to Transformed Categorical Features
+    # 7. Apply One-Hot Encoding to Transformed Categorical Features
     final_df = one_hot_categorical(bin_cat, categorical_features=cat_features)
     
     print("\n" + "=" * 100)
@@ -347,7 +355,5 @@ def main():
             print(f"\n[ERROR] Failed to save data to {path_data}. Reason: {e}")
 
 
-
 if __name__ == "__main__":
     main()
-        
