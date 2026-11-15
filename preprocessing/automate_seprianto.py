@@ -336,7 +336,7 @@ def main():
     print(final_df.info(max_cols=200))
 
     # 8. Save to CSV
-    path_data = 'final_data_students.csv'
+    path_data = 'final_data.csv'
 
     if final_df is not None:
         try:
