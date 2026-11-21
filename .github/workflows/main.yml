@@ -54,4 +54,4 @@ jobs:
           git add .
           git commit -m 'Save preprocessing data from CI run'
           git pull --rebase origin main
-          git push origin main
+          git push
